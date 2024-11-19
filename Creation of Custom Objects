@@ -1,0 +1,84 @@
+To create custom objects like Fabrication, Shed Work, Pipe Lining, and Worker programmatically in Salesforce using Apex, we need to use the Metadata API. 
+Here's a step-by-step guide and the corresponding Apex code:
+
+public class CreateCustomObjects {
+
+    public static void createObjects() {
+        MetadataService.MetadataPort service = new MetadataService.MetadataPort();
+        service.SessionHeader = new MetadataService.SessionHeader_element();
+        service.SessionHeader.sessionId = UserInfo.getSessionId();
+
+        // List to hold objects to be created
+        List<MetadataService.CustomObject> customObjects = new List<MetadataService.CustomObject>();
+
+        // Define objects
+        customObjects.add(createCustomObject('Fabrication__c', 'Fabrication', 'Manage fabrication tasks'));
+        customObjects.add(createCustomObject('Shed_Work__c', 'Shed Work', 'Track shed construction tasks'));
+        customObjects.add(createCustomObject('Pipe_Lining__c', 'Pipe Lining', 'Monitor pipe repair and replacement tasks'));
+        customObjects.add(createCustomObject('Worker__c', 'Worker', 'Manage worker details'));
+
+        try {
+            // Create the objects
+            List<MetadataService.SaveResult> results = service.createMetadata(customObjects);
+
+            // Handle results
+            for (MetadataService.SaveResult result : results) {
+                if (result.success) {
+                    System.debug('Custom Object created successfully: ' + result.fullName);
+                } else {
+                    System.debug('Error creating Custom Object: ' + result.errors[0].message);
+                }
+            }
+        } catch (Exception e) {
+            System.debug('Exception: ' + e.getMessage());
+        }
+    }
+
+    // Helper method to create a custom object
+    private static MetadataService.CustomObject createCustomObject(String apiName, String label, String description) {
+        MetadataService.CustomObject customObject = new MetadataService.CustomObject();
+        customObject.fullName = apiName;
+        customObject.label = label;
+        customObject.pluralLabel = label + 's'; // Plural label for the object
+        customObject.nameField = new MetadataService.CustomField();
+        customObject.nameField.type_x = 'Text'; // Name field type
+        customObject.nameField.label = label + ' Name'; // Label for Name field
+        customObject.description = description; // Description of the object
+        customObject.enableActivities = true; // Enable activities for the object
+        customObject.deploymentStatus = 'Deployed'; // Deployment status
+        customObject.sharingModel = 'ReadWrite'; // Sharing model
+        return customObject;
+    }
+}
+
+
+Explanation of the Code
+
+Custom Objects:
+
+    The createCustomObject method defines the custom objects with attributes like:
+      API Name: Fabrication__c, Shed_Work__c, Pipe_Lining__c, Worker__c.
+      Label: Human-readable name of the object.
+      Plural Label: For UI consistency.
+      Description: Purpose of the object.
+      Name Field: Text-based Name field for the object.
+      Sharing Model: Controls data access (ReadWrite in this case).
+    Metadata Service:
+      Used to interact with the Salesforce Metadata API.
+      createMetadata creates the objects in Salesforce.
+    Exception Handling:
+      Ensures proper logging in case of errors.
+    Deployment Status:
+      Set to Deployed, so the objects are active immediately after creation.
+
+
+Running the Code
+  Deploy the CreateCustomObjects class and the MetadataService.cls class to Salesforce org.
+  Open the Developer Console and execute the following in the Execute Anonymous window:
+
+      CreateCustomObjects.createObjects();
+
+
+
+
+
