@@ -1,3 +1,18 @@
+An object field is a specific attribute or column of a Salesforce object used to store a piece of information. 
+Fields can belong to both standard and custom objects. Each field has a data type that determines the type of data it can hold.
+
+Types of Object Fields:
+    Standard Fields: Default fields provided by Salesforce (e.g., Name, Created Date).
+    Custom Fields: User-created fields tailored to specific needs (e.g., Length, Quantity).
+    Relationship Fields: Special fields to link objects (e.g., Lookup or Master-Detail relationships).
+
+Field Attributes:
+    Data Types: Text, Number, Currency, Date, Checkbox, etc.
+    Validation Rules: Ensure data entered in the field meets specific criteria.
+Example:
+    In the Fabrication object, fields like Length__c, Width__c, and Material_Type__c would capture project-specific details.
+
+
 To programmatically add fields like Length, Breadth, Width, Area, Quantity, and Price to the Fabrication object using Apex and the Metadata API, we can follow the same procedure described earlier.
 Below is the specific implementation for creating these fields with the appropriate types and attributes.
 
