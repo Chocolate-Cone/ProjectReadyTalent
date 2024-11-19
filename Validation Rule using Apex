@@ -1,3 +1,15 @@
+A validation rule enforces data integrity by ensuring that data entered into Salesforce meets specified criteria before it is saved. 
+If a record violates the validation rule, Salesforce prevents the record from being saved and displays an error message.
+
+Components of a Validation Rule:
+    Error Condition Formula: A logical formula that defines the condition to validate (e.g., Length__c <= 0).
+    Error Message: A custom message shown to users when the validation fails.
+    Active Status: Determines whether the rule is currently enforced.
+Example: A validation rule on the Fabrication object might enforce that the length of a material must be greater than 0:
+        Error Condition Formula: Length__c <= 0
+        Error Message: "Length must be greater than 0."
+
+
 To create a Validation Rule programmatically for the Fabrication object using Apex, we need to use the Metadata API.
 Validation rules ensure that data entered in Salesforce meets specific criteria before saving records.
 Below is the process to define and deploy a validation rule using Apex.
