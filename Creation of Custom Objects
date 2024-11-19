@@ -1,3 +1,15 @@
+A custom object is a user-defined database table in Salesforce used to store information specific to a business or organization.
+Unlike standard objects provided by Salesforce (e.g., Account, Contact), custom objects are created to meet unique business needs.
+
+Key Features of Custom Objects:
+    We can define custom fields to store specific data.
+    Relationships can be established between custom and standard objects.
+    Supports features like validation rules, workflows, and automation.
+    Accessible through APIs for integration with external systems.
+Example:
+    A Fabrication custom object might store details about engineering projects, including project name, type, materials used, and dimensions.
+
+
 To create custom objects like Fabrication, Shed Work, Pipe Lining, and Worker programmatically in Salesforce using Apex, we need to use the Metadata API. 
 Here's a step-by-step guide and the corresponding Apex code:
 
