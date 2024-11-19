@@ -1,0 +1,85 @@
+To programmatically add fields like Length, Breadth, Width, Area, Quantity, and Price to the Fabrication object using Apex and the Metadata API, we can follow the same procedure described earlier.
+Below is the specific implementation for creating these fields with the appropriate types and attributes.
+
+Apex Code to Create Multiple Fields:
+
+public class CreateFabricationFields {
+
+    public static void createFields() {
+        MetadataService.MetadataPort service = new MetadataService.MetadataPort();
+        service.SessionHeader = new MetadataService.SessionHeader_element();
+        service.SessionHeader.sessionId = UserInfo.getSessionId();
+
+        // List to hold all fields to be created
+        List<MetadataService.CustomField> fieldsToCreate = new List<MetadataService.CustomField>();
+
+        // Define fields
+        fieldsToCreate.add(createCustomField('Length__c', 'Length', 'Number', null, 18, 2));
+        fieldsToCreate.add(createCustomField('Breadth__c', 'Breadth', 'Number', null, 18, 2));
+        fieldsToCreate.add(createCustomField('Width__c', 'Width', 'Number', null, 18, 2));
+        fieldsToCreate.add(createCustomField('Area__c', 'Area', 'Number', null, 18, 2));
+        fieldsToCreate.add(createCustomField('Quantity__c', 'Quantity', 'Number', null, 18, 0));
+        fieldsToCreate.add(createCustomField('Price__c', 'Price', 'Currency', null, 18, 2));
+
+        try {
+            // Create the fields in the Fabrication object
+            List<MetadataService.SaveResult> results = service.createMetadata(fieldsToCreate);
+
+            // Handle the results
+            for (MetadataService.SaveResult result : results) {
+                if (result.success) {
+                    System.debug('Field created successfully: ' + result.fullName);
+                } else {
+                    System.debug('Error creating field: ' + result.errors[0].message);
+                }
+            }
+        } catch (Exception e) {
+            System.debug('Exception: ' + e.getMessage());
+        }
+    }
+
+    // Helper method to create a custom field
+    private static MetadataService.CustomField createCustomField(
+        String apiName, String label, String fieldType,
+        Integer length, Integer precision, Integer scale
+    ) {
+        MetadataService.CustomField customField = new MetadataService.CustomField();
+        customField.fullName = 'Fabrication__c.' + apiName; // Fabrication object API name
+        customField.label = label;
+        customField.type_x = fieldType;
+
+        // Add attributes based on the field type
+        if (fieldType == 'Text' && length != null) {
+            customField.length = length;
+        }
+        if ((fieldType == 'Number' || fieldType == 'Currency') && precision != null && scale != null) {
+            customField.precision = precision;
+            customField.scale = scale;
+        }
+        return customField;
+    }
+}
+
+
+Explanation of the Code
+    
+    Field Definitions:
+        Length__c, Breadth__c, Width__c, and Area__c:
+        Type: Number
+        Precision: 18 (maximum digits)
+        Scale: 2 (two decimal places for measurements)
+        Quantity__c:
+        Type: Number
+        Precision: 18
+        Scale: 0 (whole numbers)
+        Price__c:
+        Type: Currency
+        Precision: 18
+        Scale: 2 (for monetary values)
+
+
+Executing the Code
+
+    Open the Developer Console.
+    Run the following in the Execute Anonymous window:
+        CreateFabricationFields.createFields();
